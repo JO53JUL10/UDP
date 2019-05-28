@@ -1,14 +1,18 @@
 #UDPClient.py
 
-from socket import socket, SOCK_DGRAM, AF_INET
+from socket import socket, timeout, SOCK_DGRAM, AF_INET
 
 serverName = 'localhost'
 serverPort = 12000
 clientSocket = socket(AF_INET, SOCK_DGRAM)
+clientSocket.settimeout(1)
 message = raw_input('Input lowercase sentence: ')
 clientSocket.sendto(message, (serverName, serverPort))
-modifiedMessage, addr = clientSocket.recvfrom(2048)
-print modifiedMessage, addr
+try:
+    modifiedMessage, addr = clientSocket.recvfrom(2048)
+    print(modifiedMessage, addr)
+except timeout:
+    print("Socket timed out. Not answer received in the last second.")
 clientSocket.close()
 
 #Allow the client to give up if no response has been reveived within 1 second.
