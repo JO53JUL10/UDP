@@ -10,19 +10,20 @@ serverPort=12001
 # Assign IP address and port number to socket
 serverSocket.bind(('', serverPort))
 serverSocket.listen(1)
-print "Interrupt with CTRL-C"
+print("Interrupt with CTRL-C")
+print("Waiting connections")
+connectionSocket, addr = serverSocket.accept()
+print ("Connection from %s port %s" % addr)
 while True:
-	try:
-		connectionSocket, addr = serverSocket.accept()
-		print "Connection from %s port %s" % addr
+	try:		
 		# Receive the client packet
 		message = connectionSocket.recv(2048)
-                #print "Orignal message from client: ", message
+		print("Orignal message from client: ", message)
 		# Capitalize the message from the client
 		message = message.upper()
 		connectionSocket.send(message)
-		connectionSocket.close()
 	except KeyboardInterrupt:
-		print "\nInterrupted by CTRL-C"
+		print ("\nInterrupted by CTRL-C")
 		break
+connectionSocket.close()
 serverSocket.close()
